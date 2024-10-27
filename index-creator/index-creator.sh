@@ -6,7 +6,7 @@ INDEX_FILENAME=""
 result_file=$RESULT_PATH/$INDEX_FILENAME
 
 RESULT_PATH="result"
-SEARCH_PATH="/home/rtoscano/projects/mybok"
+SEARCH_PATH=".../projects/mybok"
 
 function setIndexFileName(){ 
     # Prompt the user to enter a filename with a default value
