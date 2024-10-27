@@ -31,7 +31,7 @@ touch $RESULT_PATH/$INDEX_FILENAME
 
 
 echo "Generating... Ignored files in /docs/ subfolder"
-find "$SEARCH_PATH" -path "$SEARCH_PATH/.*" -prune -o -path "*/docs/*" -prune -o -print | while read filename; do
+find "$SEARCH_PATH" -path "$SEARCH_PATH/.*" -prune -o -path "*/docs/*" -prune -o -print | sort | while read filename; do
     
     relative_filename="${filename#$SEARCH_PATH/}" 
 
