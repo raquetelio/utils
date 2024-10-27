@@ -3,6 +3,8 @@
 DEFAULT_INDEX_FILENAME="index.md"
 INDEX_FILENAME=""
 
+result_file=$RESULT_PATH/$INDEX_FILENAME
+
 RESULT_PATH="result"
 SEARCH_PATH="/home/rtoscano/projects/mybok"
 
@@ -30,19 +32,38 @@ touch $RESULT_PATH/$INDEX_FILENAME
 
 echo "Generating... Ignored files in /docs/ subfolder"
 find "$SEARCH_PATH" -path "$SEARCH_PATH/.*" -prune -o -path "*/docs/*" -prune -o -print | while read filename; do
-        relative_filename="${filename#$SEARCH_PATH/}"
-        echo "$relative_filename"
+    
+    relative_filename="${filename#$SEARCH_PATH/}" 
+
+
 
     depth=$(echo "$relative_filename" | tr -cd '/' | wc -c)
 
+    # echo "$relative_filename - Depth: $depth"
+
     if [[ $depth == 0 ]]; then
-        index.md > echo "## "$relative_filename"\n"
+        echo "- [$relative_filename]($relative_filename)" >> $RESULT_PATH/$INDEX_FILENAME
+    
+    else
+        # Append the file/subfolder name to the result file with tabs
+        tabs=$(printf '\t%.0s' $(seq 1 $depth))
+        # echo -e "${tabs}- [$relative_filename]($relative_filename)" >> $RESULT_PATH/$INDEX_FILENAME
+
+         # Check if the file has a .md extension
+        if [[ "$relative_filename" == *.md ]]; then
+            # Get the first line of the .md file
+            first_line=$(head -n 1 "$filename" | sed 's/^# *//')
+            echo -e "${tabs}- [${first_line}]($relative_filename)" >> $RESULT_PATH/$INDEX_FILENAME
+        else
+            # For other files, write the relative filename
+            echo -e "${tabs}- [${relative_filename}]($relative_filename)" >> $RESULT_PATH/$INDEX_FILENAME
+        fi       
+
     fi
     
-    # Print the relative filename and its depth
-    echo "Depth $depth: $relative_filename"
-
     done
+
+    echo "Done."
 
 
 
